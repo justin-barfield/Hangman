@@ -3,22 +3,34 @@ import { Card, Row, CardGroup } from 'react-bootstrap';
 import './style.css';
 
 
-function Letters() {
+function Letters(props) {
+    console.log("letters: ", props.propWord)
+    var count = props.propWord.length
+    console.log(count)
+    var newObj = Object.assign({}, props.propWord);
+    console.log("newObj: ", newObj)
+    
     return (
 
         <Row>
             
             <CardGroup>
 
-                <Card>
+                {/* {this.props.propWord.map(prop => {
+                    
+                    <Card
+                        key={prop}
+                    >
 
-                    <Card.Title>
+                        <Card.Title>
 
-                        Letters to be defined in a single card per letter
+                            Letters to be defined in a single card per letter
 
-                    </Card.Title>
+                        </Card.Title>
 
-                </Card>
+                    </Card>
+            
+                })} */}
 
             </CardGroup>
 
