@@ -12,8 +12,24 @@ import Letters from './components/Letters';
 class App extends Component {
 
 state={
+    attempts: "",
+    wins: "",
+    losses: "",
+    picture: "",
+    word: ""
     
 }
+
+// function for API word
+
+
+// function for updating states
+
+
+// function for breaking up word and breaking it out into the necessary components. May be easier to break word into array or obj then count how many letters have been selected correctly.
+
+
+// function to take key press, validate against word, and update state accordingly. If/else statement or condition will be needed.
 
 
 componentDidMount() {
