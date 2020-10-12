@@ -3,6 +3,11 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row, Col} from 'react-bootstrap';
 import Title from './components/Title';
+import Attempts from './components/Attempts';
+import GamesWon from './components/GamesWon';
+import GamesLost from './components/GamesLost';
+import Hangman from './components/Hangman';
+import Letters from './components/Letters';
 
 class App extends Component {
 
@@ -32,7 +37,12 @@ render(){
 
                 <Col sm={2}>
 
-                Scores
+                    <Attempts/>
+
+                    <GamesWon/>
+
+                    <GamesLost/>
+
                 
                 </Col>
 
@@ -40,13 +50,13 @@ render(){
 
                     <Row>
 
-                        Hangman
+                        <Hangman/>
 
                     </Row>
 
                     <Row>
 
-                        Word
+                        <Letters/>
 
                     </Row>
 
