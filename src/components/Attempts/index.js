@@ -6,7 +6,7 @@ function Attempts() {
     return (
         <Row>
             
-            Attempts
+            Letters used: 
 
         </Row>
     )
