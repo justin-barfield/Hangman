@@ -1,15 +1,14 @@
 import React from 'react';
-import { Row, Image } from 'react-bootstrap';
 import './style.css';
 
 function Hangman() {
     return (
 
-        <Row>
+        <div className="row">
             
-            <Image src="#"/>
+            <img src="#"/>
 
-        </Row>
+        </div>
 
     )
 }

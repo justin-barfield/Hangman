@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Alert } from 'react-bootstrap';
 import Title from './components/Title';
 import Attempts from './components/Attempts';
 import GamesWon from './components/GamesWon';
@@ -19,6 +18,7 @@ class App extends Component {
         word: [],
         remainingAttempts: 6,
         repeat: false,
+        letterIndex: [],
         
     }
 
@@ -35,7 +35,7 @@ class App extends Component {
 
     // Set word state for new incoming word
     setWord = () => {
-        const fullWord = "word";
+        const fullWord = "wordd";
         const wordArray = fullWord.split("");
         
         console.log("wordArray inside setWord: ", wordArray);
@@ -48,12 +48,14 @@ class App extends Component {
     handleKeyDown = (event) => {
         let match = false;
         let repeat = false;
+        let letterIndex= [];
         
         // Validate if key pressed matches the word
         this.state.word.map((value, index) => {
             
             if( this.state.word[index] === event.key ) {
-                return match = true;
+                letterIndex.push(index);
+                return match = true, letterIndex;
             }
             
         })
@@ -73,8 +75,9 @@ class App extends Component {
             this.setState({
                 attempts: this.state.attempts.concat(event.key),
                 repeat: false,
+                letterIndex: this.state.letterIndex.concat(letterIndex),
             });
-        
+            
         } else {
 
             this.setState({
@@ -85,6 +88,7 @@ class App extends Component {
 
 
         console.log(this.state.attempts);
+        console.log(this.state.letterIndex);
     }
 
 
@@ -108,17 +112,17 @@ class App extends Component {
 
         <>
 
-            <Container fluid={true}>
+            <div className="container-fluid">
 
-                <Row>
+                <div className="row">
 
                     <Title/>
                     
-                </Row>
+                </div>
 
-                <Row>
+                <div className="row">
 
-                    <Col sm={2}>
+                    <div className="col-4">
 
                         <Attempts/>
 
@@ -127,33 +131,36 @@ class App extends Component {
                         <GamesLost/>
 
                     
-                    </Col>
+                    </div>
 
-                    <Col sm={10}>
+                    <div className="col-8">
 
-                        <Row>
+                        <div className="row">
 
                             <Hangman/>
 
-                        </Row>
+                        </div>
 
-                        <Row>
+                        <div className="row">
 
                             {this.state.repeat ? (
-                                <Alert variant={"danger"}>
-                                    Repeat character used
-                                </Alert>
+                                <div class="alert alert-primary" role="alert">
+                                    Repeat character used!
+                                </div>
                             ):(<></>)}
 
-                            <Letters propWord={this.state.word} />
+                            <Letters 
+                            letterIndex={this.state.letterIndex}
+                            word={this.state.word}
+                            />
 
-                        </Row>
+                        </div>
 
-                    </Col>
+                    </div>
                     
-                </Row>
+                </div>
 
-            </Container>
+            </div>
 
         </>
 

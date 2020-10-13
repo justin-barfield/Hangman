@@ -1,40 +1,55 @@
 import React from 'react';
-import { Card, Row, CardGroup } from 'react-bootstrap';
 import './style.css';
 
 
 function Letters(props) {
-    console.log("letters: ", props.propWord)
-    var count = props.propWord.length
+    console.log("letters: ", props.word)
+    var count = props.word.length
     console.log(count)
-    var newObj = Object.assign({}, props.propWord);
-    console.log("newObj: ", newObj)
+    // var newObj = Object.assign({}, props.propWord);
+    // console.log("newObj: ", newObj)
+
+    // SUDO
+    // Take word length and create 1 card for each letter.
+    // Assign each container a unique identifier.
+    // 
+    // Take letter guessed and adjust the container with the corresponding unique id.
+    // 
+    
+    console.log("props letters: ", props)
+
+    const letters = props.word
+    
+    const listBlanks = letters.map((value, index) =>
+        <div className="card bg-primary letter-card"
+            key={index}
+            id={index}
+        >
+            <div className="card-body" id={index}>
+                <h5 className="card-title letter-card">
+                    {value}
+                </h5>
+            </div>
+        </div>
+    );
+
+    let indexOf = props.letterIndex
+
+    const listLetters = 0
+
+
     
     return (
 
-        <Row>
+        <div className="row">
             
-            <CardGroup>
+            <div className="card-group">
 
-                {/* {this.props.propWord.map(prop => {
-                    
-                    <Card
-                        key={prop}
-                    >
-
-                        <Card.Title>
-
-                            Letters to be defined in a single card per letter
-
-                        </Card.Title>
-
-                    </Card>
+                {listBlanks}
             
-                })} */}
+            </div>
 
-            </CardGroup>
-
-        </Row>
+        </div>
     )
 }
 

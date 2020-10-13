@@ -1,14 +1,13 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
 import './style.css';
 
 function GamesLost() {
     return (
-        <Row>
+        <div className="row">
             
             Games Lost: 
 
-        </Row>
+        </div>
     )
 }
 
