@@ -39,17 +39,23 @@ class App extends Component {
     setWord = () => {
         const fullWord = "wordd";
         const wordArray = fullWord.split("");
-        
-        console.log("wordArray inside setWord: ", wordArray);
 
-        this.setState({ word: wordArray });
+        const wordObj = wordArray.map((value, index) => {
+            return {
+                id: index,
+                val: value
+            }
+        })
+        
+        // console.log("setWord: wordObj: ", wordObj);
+
+        this.setState({ word: wordObj });
         
     };
 
     // Record key press
     handleKeyDown = (event) => {
         let match = [];
-        let nonMatch = [];
         let repeat = false;
         let letterIndex= [];
         let correct = false;
@@ -77,12 +83,16 @@ class App extends Component {
 
         // Validate if key pressed matches the word
         this.state.word.map((value, index) => {
+
+            console.log(value)
+
+            // console.log(this.state.word[0].val)
             
-            if( this.state.word[index] === event.key ) {
+            if( this.state.word[index].val === event.key ) {
                 letterIndex.push(index);
-                return match = value, letterIndex, correct = true;
-            } else {
-                return nonMatch = value;
+                match.push(this.state.word[index]);
+                correct = true;
+                return
             }
             
         })
