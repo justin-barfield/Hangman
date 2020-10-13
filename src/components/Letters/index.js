@@ -15,19 +15,23 @@ function Letters(props) {
     // 
     // Take letter guessed and adjust the container with the corresponding unique id.
     // 
+    // create a function that will take the letter from props and place into the inner html for the h5
     
     console.log("props letters: ", props)
 
     const letters = props.word
     
     const listBlanks = letters.map((value, index) =>
-        <div className="card bg-primary letter-card"
+        <div 
+            className="card bg-primary letter-card"
             key={index}
-            id={index}
         >
-            <div className="card-body" id={index}>
-                <h5 className="card-title letter-card">
-                    {value}
+            <div className="card-body">
+                <h5
+                    id={index} 
+                    className="card-title letter-card"
+                >
+                    
                 </h5>
             </div>
         </div>

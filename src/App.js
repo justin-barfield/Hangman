@@ -11,14 +11,16 @@ import Letters from './components/Letters';
 class App extends Component {
 
     state={
-        attempts: [],
-        wins: "",
-        losses: "test",
+        allAttempts: [],
+        goodAttempts: [],
+        wins: 0,
+        losses: 0,
         picture: "",
         word: [],
         remainingAttempts: 6,
         repeat: false,
         letterIndex: [],
+        correct: false,
         
     }
 
@@ -44,36 +46,53 @@ class App extends Component {
         
     };
 
-    // Record attempts on key press
+    // Record key press
     handleKeyDown = (event) => {
-        let match = false;
+        let match = [];
+        let nonMatch = [];
         let repeat = false;
         let letterIndex= [];
+        let correct = false;
         
+        // Validate if the key pressed is recurring in allAttempts
+        this.state.allAttempts.map((value, index) => {
+
+            if( this.state.allAttempts[index] === event.key ) {
+                return repeat = true;
+            }
+
+        })
+
+        // Validate if the key pressed is recurring in goodAttempts
+
+        /* TODO: Unexpected error here. Attempting to have good and bad attempts separately checked causes repeat to never return true. Would like to have the correct letters not display in letters used. To be investigated later. Bypassing error by placing all key strokes into allAttempts state. */
+
+        // this.state.goodAttempts.map((value, index) => {
+
+        //     if( this.state.goodAttempts[index] === event.key ) {
+        //         return repeat = true;
+        //     }
+
+        // })
+
         // Validate if key pressed matches the word
         this.state.word.map((value, index) => {
             
             if( this.state.word[index] === event.key ) {
                 letterIndex.push(index);
-                return match = true, letterIndex;
+                return match = value, letterIndex, correct = true;
+            } else {
+                return nonMatch = value;
             }
             
         })
 
-        // Validate if the key pressed is recurring
-        this.state.attempts.map((value, index) => {
-
-            if( this.state.attempts[index] === event.key ) {
-                return repeat = true
-            }
-        })
-
-
-        // if repeat is false set attempts and repeat. else set repeat to true
+        // if repeat is false set allAttempts and repeat. else set repeat to true
         if( !repeat ) {
 
             this.setState({
-                attempts: this.state.attempts.concat(event.key),
+                allAttempts: this.state.allAttempts.concat(event.key),
+                goodAttempts: this.state.goodAttempts.concat(match),
                 repeat: false,
                 letterIndex: this.state.letterIndex.concat(letterIndex),
             });
@@ -87,8 +106,12 @@ class App extends Component {
         }
 
 
-        console.log(this.state.attempts);
-        console.log(this.state.letterIndex);
+        console.log("handleKeyDown: allAttempts: ", this.state.allAttempts);
+        console.log("handleKeyDown: goodAttempts: ", this.state.goodAttempts);
+        console.log("handleKeyDown: letterIndex: ", this.state.letterIndex);
+        console.log("handleKeyDown: repeat: ", repeat);
+        console.log("handleKeyDown: match: ", match);
+        console.log("handleKeyDown: letterIndex: ", letterIndex);
     }
 
 
@@ -124,7 +147,9 @@ class App extends Component {
 
                     <div className="col-4">
 
-                        <Attempts/>
+                        <Attempts
+                            allAttempts={this.state.allAttempts}
+                        />
 
                         <GamesWon/>
 
@@ -144,14 +169,16 @@ class App extends Component {
                         <div className="row">
 
                             {this.state.repeat ? (
-                                <div class="alert alert-primary" role="alert">
+                                <div className="alert alert-primary" role="alert">
                                     Repeat character used!
                                 </div>
                             ):(<></>)}
 
                             <Letters 
-                            letterIndex={this.state.letterIndex}
-                            word={this.state.word}
+                                letterIndex={this.state.letterIndex}
+                                word={this.state.word}
+                                goodAttempts={this.state.goodAttempts}
+                                correct={this.state.correct}
                             />
 
                         </div>

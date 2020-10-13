@@ -1,11 +1,11 @@
 import React from 'react';
 import './style.css';
 
-function Attempts() {
+function Attempts(props) {
     return (
         <div className="row">
             
-            Letters used: 
+            Letters used: {props.allAttempts}
 
         </div>
     )
