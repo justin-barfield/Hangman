@@ -11,134 +11,206 @@ import Letters from './components/Letters';
 class App extends Component {
 
     state={
+        word: [],
+        wordLength: 0,
+        count: 0,
         allAttempts: [],
-        goodAttempts: [],
+        letterIndex: [],
+        numberOfBadAttempts: 0,
+        remainingAttempts: 6,
+        repeat: false,
         wins: 0,
         losses: 0,
         picture: "",
-        word: [],
-        remainingAttempts: 6,
-        repeat: false,
-        letterIndex: [],
-        correct: false,
+        pageLock: false,
         
     }
 
     // function for API word
-
-
-    // function for updating states
+    // TODO: count word length, reset game, add wins & losses
 
     // Clear word state for new incoming word
-    clearWord = () => {
-        this.setState({ word: [] });
-        console.log(this.state.word);
+    resetGame = () => {
+        this.setState({ 
+            word: [],
+            count: 0,
+            allAttempts: [],
+            letterIndex: [],
+            numberOfBadAttempts: 0,
+            remainingAttempts: 6,
+            repeat: false,
+            pageLock: false
+         });
     };
 
     // Set word state for new incoming word
     setWord = () => {
-        const fullWord = "wordd";
+        const fullWord = "worldd";
         const wordArray = fullWord.split("");
+        let wordLength = wordArray.length;
 
         const wordObj = wordArray.map((value, index) => {
             return {
+                found: false,
+                val: value,
                 id: index,
-                val: value
             }
         })
-        
-        // console.log("setWord: wordObj: ", wordObj);
 
-        this.setState({ word: wordObj });
+        this.setState({ 
+            word: wordObj,
+            wordLength: wordLength,
+            remainingAttempts: 6,
+        });
         
+    };
+
+    // Win count bool
+    win = () =>{
+        if( this.state.wordLength === this.state.count ) {
+            return true
+        }
+    };
+
+    // Attempt count bool
+    loss = () => {
+        if( this.state.numberOfBadAttempts === 5 ) {
+            return true
+        }
     };
 
     // Record key press
     handleKeyDown = (event) => {
-        let match = [];
+        let match = [...this.state.word];
         let repeat = false;
-        let letterIndex= [];
         let correct = false;
+        let letterIndex= [];
+        let counter = this.state.count;
+        let gameWin = this.state.GamesWon;
+        let gameLost = this.state.GamesLost;
         
         // Validate if the key pressed is recurring in allAttempts
         this.state.allAttempts.map((value, index) => {
 
             if( this.state.allAttempts[index] === event.key ) {
                 return repeat = true;
-            }
+            };
 
-        })
-
-        // Validate if the key pressed is recurring in goodAttempts
+        });
 
         /* TODO: Unexpected error here. Attempting to have good and bad attempts separately checked causes repeat to never return true. Would like to have the correct letters not display in letters used. To be investigated later. Bypassing error by placing all key strokes into allAttempts state. */
 
-        // this.state.goodAttempts.map((value, index) => {
-
-        //     if( this.state.goodAttempts[index] === event.key ) {
-        //         return repeat = true;
-        //     }
-
-        // })
-
         // Validate if key pressed matches the word
         this.state.word.map((value, index) => {
-
-            console.log(value)
-
-            // console.log(this.state.word[0].val)
             
             if( this.state.word[index].val === event.key ) {
+
+                match[index] = {...match[index], found: true};          
                 letterIndex.push(index);
-                match.push(this.state.word[index]);
+                counter++;
                 correct = true;
-                return
-            }
-            
-        })
 
-        // if repeat is false set allAttempts and repeat. else set repeat to true
-        if( !repeat ) {
-
-            this.setState({
-                allAttempts: this.state.allAttempts.concat(event.key),
-                goodAttempts: this.state.goodAttempts.concat(match),
-                repeat: false,
-                letterIndex: this.state.letterIndex.concat(letterIndex),
-            });
+            };
             
+        });
+
+        // if page is not locked
+        if ( !this.state.pageLock ){
+            console.log("pageLock status: ", this.state.pageLock)
+
+            // if repeat = false 
+            if( !repeat ) {
+
+                // If not correct letter guessed
+                if( correct ) {
+                    console.log("Good Guess")
+
+                    this.setState({
+                        allAttempts: this.state.allAttempts.concat(event.key),
+                        word: match,
+                        repeat: false,
+                        letterIndex: this.state.letterIndex.concat(letterIndex),
+                        count: counter,
+                    }, () => {
+
+                        // Update gamesWon
+                        if( this.win() ) {
+                            console.log("Game Won")
+        
+                            this.setState({
+                                pageLock: true,
+                                wins: this.state.wins +1,
+                            }, () => {
+                                setTimeout(() => {
+                                    this.resetGame();
+                                    this.setWord();
+                                }, 5000);
+                            });
+        
+                        };
+                    });
+
+                // If incorrect letter guessed
+                } else if( !correct ) {
+                    console.log("Bad Guess")
+
+                    this.setState({
+                        allAttempts: this.state.allAttempts.concat(event.key),
+                        repeat: false,
+                        numberOfBadAttempts: this.state.numberOfBadAttempts + 1,
+                    }, () => {
+
+                        // Update gamesLost
+                        if( this.loss() ) {
+                            console.log("Game Lost")
+                            
+                            this.setState({
+                                pageLock: true,
+                                losses: this.state.losses + 1,
+                            }, () => {
+                                setTimeout(() => {
+                                    this.resetGame();
+                                    this.setWord();
+                                }, 5000);
+                            });
+        
+                        }
+                    });
+
+                } else {
+
+                    console.log("Key event not accounted for...")
+                };
+
+            // If repeat = true
+            } else {
+
+                this.setState({
+                    repeat: true,
+                });
+
+            };
         } else {
-
-            this.setState({
-                repeat: true,
-            })
-
+            console.log("pageLock status: ", this.state.pageLock)
+            return
         }
 
-
-        console.log("handleKeyDown: allAttempts: ", this.state.allAttempts);
-        console.log("handleKeyDown: goodAttempts: ", this.state.goodAttempts);
-        console.log("handleKeyDown: letterIndex: ", this.state.letterIndex);
-        console.log("handleKeyDown: repeat: ", repeat);
+        console.log("handleKeyDown: word: ", this.state.word);
         console.log("handleKeyDown: match: ", match);
-        console.log("handleKeyDown: letterIndex: ", letterIndex);
-    }
-
-
-
-    // function for breaking up word and breaking it out into the necessary components. May be easier to break word into array or obj then count how many letters have been selected correctly.
-
-
-    // function to take key press, validate against word, and update state accordingly. If/else statement or condition will be needed.
+        console.log("handleKeyDown: allAttempts: ", this.state.allAttempts);
+        console.log("handleKeyDown: count: ", this.state.count);
+        console.log("handleKeyDown: BadAttempts: ", this.state.numberOfBadAttempts)
+    };
 
     componentDidMount() {
-        this.clearWord();
+        this.resetGame();
         this.setWord();
-        document.addEventListener("keydown", this.handleKeyDown)
-        
-    }
-
-
+        if( this.state.pageLock ) {
+            return
+        } else {
+            document.addEventListener("keydown", this.handleKeyDown);
+        }
+    };
 
     render(){
         return (
@@ -161,9 +233,13 @@ class App extends Component {
                             allAttempts={this.state.allAttempts}
                         />
 
-                        <GamesWon/>
+                        <GamesWon
+                            wins={this.state.wins}
+                        />
 
-                        <GamesLost/>
+                        <GamesLost
+                            losses={this.state.losses}
+                        />
 
                     
                     </div>
@@ -185,9 +261,7 @@ class App extends Component {
                             ):(<></>)}
 
                             <Letters 
-                                letterIndex={this.state.letterIndex}
                                 word={this.state.word}
-                                goodAttempts={this.state.goodAttempts}
                                 correct={this.state.correct}
                             />
 
