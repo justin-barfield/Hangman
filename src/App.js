@@ -86,8 +86,6 @@ class App extends Component {
         let correct = false;
         let letterIndex= [];
         let counter = this.state.count;
-        let gameWin = this.state.GamesWon;
-        let gameLost = this.state.GamesLost;
         
         // Validate if the key pressed is recurring in allAttempts
         this.state.allAttempts.map((value, index) => {

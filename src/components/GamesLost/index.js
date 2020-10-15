@@ -1,11 +1,12 @@
 import React from 'react';
 import './style.css';
 
-function GamesLost() {
+function GamesLost(props) {
+
     return (
         <div className="row">
             
-            Games Lost: 
+            Games Lost: {props.losses}
 
         </div>
     )
