@@ -3,10 +3,6 @@ import './style.css';
 
 
 function Letters(props) {
-
-    console.log("Letters: props.word: ", props.word)
-
-    {/* take props, map all cards to page. if attempt is good, update card with letter. else, keep card blank */}
     
     const mapAll = props.word.map((value, index) =>
     
@@ -19,11 +15,9 @@ function Letters(props) {
                     id={index} 
                     className="card-title letter-card"
                 >
-                    { props.word[index].found ? (
+                    {props.word[index].found ? (
                         <>{props.word[index].val}</>
-                    ) : (<></>)}
-          
-                    
+                    ) : (<>_</>)}
                 </h5>
             </div>
         </div>

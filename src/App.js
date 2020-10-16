@@ -23,6 +23,7 @@ class App extends Component {
         losses: 0,
         picture: "",
         pageLock: false,
+        invalidKey: false,
         
     }
 
@@ -39,13 +40,14 @@ class App extends Component {
             numberOfBadAttempts: 0,
             remainingAttempts: 6,
             repeat: false,
-            pageLock: false
+            pageLock: false,
+            invalidKey: false,
          });
     };
 
     // Set word state for new incoming word
     setWord = () => {
-        const fullWord = "worldd";
+        const fullWord = "dworldd";
         const wordArray = fullWord.split("");
         let wordLength = wordArray.length;
 
@@ -86,118 +88,127 @@ class App extends Component {
         let correct = false;
         let letterIndex= [];
         let counter = this.state.count;
+        const regex = /^[A-Za-z]+$/
+
+        // validate key press is alphabetic
+        if( regex.test(event.key) ) {
         
-        // Validate if the key pressed is recurring in allAttempts
-        this.state.allAttempts.map((value, index) => {
+            // Validate if the key pressed is recurring in allAttempts
+            this.state.allAttempts.map((value, index) => {
 
-            if( this.state.allAttempts[index] === event.key ) {
-                return repeat = true;
-            };
-
-        });
-
-        /* TODO: Unexpected error here. Attempting to have good and bad attempts separately checked causes repeat to never return true. Would like to have the correct letters not display in letters used. To be investigated later. Bypassing error by placing all key strokes into allAttempts state. */
-
-        // Validate if key pressed matches the word
-        this.state.word.map((value, index) => {
-            
-            if( this.state.word[index].val === event.key ) {
-
-                match[index] = {...match[index], found: true};          
-                letterIndex.push(index);
-                counter++;
-                correct = true;
-
-            };
-            
-        });
-
-        // if page is not locked
-        if ( !this.state.pageLock ){
-            console.log("pageLock status: ", this.state.pageLock)
-
-            // if repeat = false 
-            if( !repeat ) {
-
-                // If not correct letter guessed
-                if( correct ) {
-                    console.log("Good Guess")
-
-                    this.setState({
-                        allAttempts: this.state.allAttempts.concat(event.key),
-                        word: match,
-                        repeat: false,
-                        letterIndex: this.state.letterIndex.concat(letterIndex),
-                        count: counter,
-                    }, () => {
-
-                        // Update gamesWon
-                        if( this.win() ) {
-                            console.log("Game Won")
-        
-                            this.setState({
-                                pageLock: true,
-                                wins: this.state.wins +1,
-                            }, () => {
-                                setTimeout(() => {
-                                    this.resetGame();
-                                    this.setWord();
-                                }, 5000);
-                            });
-        
-                        };
-                    });
-
-                // If incorrect letter guessed
-                } else if( !correct ) {
-                    console.log("Bad Guess")
-
-                    this.setState({
-                        allAttempts: this.state.allAttempts.concat(event.key),
-                        repeat: false,
-                        numberOfBadAttempts: this.state.numberOfBadAttempts + 1,
-                    }, () => {
-
-                        // Update gamesLost
-                        if( this.loss() ) {
-                            console.log("Game Lost")
-                            
-                            this.setState({
-                                pageLock: true,
-                                losses: this.state.losses + 1,
-                            }, () => {
-                                setTimeout(() => {
-                                    this.resetGame();
-                                    this.setWord();
-                                }, 5000);
-                            });
-        
-                        }
-                    });
-
-                } else {
-
-                    console.log("Key event not accounted for...")
+                if( this.state.allAttempts[index] === event.key ) {
+                    return repeat = true;
                 };
 
-            // If repeat = true
+            });
+
+            /* TODO: Unexpected error here. Attempting to have good and bad attempts separately checked causes repeat to never return true. Would like to have the correct letters not display in letters used. To be investigated later. Bypassing error by placing all key strokes into allAttempts state. */
+
+            // Validate if key pressed matches the word
+            this.state.word.map((value, index) => {
+                
+                if( this.state.word[index].val === event.key ) {
+
+                    match[index] = {...match[index], found: true};          
+                    letterIndex.push(index);
+                    counter++;
+                    correct = true;
+
+                };
+                
+            });
+
+            // if page is not locked
+            if ( !this.state.pageLock ){
+                console.log("pageLock status: ", this.state.pageLock)
+
+                // if repeat = false 
+                if( !repeat ) {
+
+                    // If not correct letter guessed
+                    if( correct ) {
+                        console.log("Good Guess")
+
+                        this.setState({
+                            allAttempts: this.state.allAttempts.concat(event.key),
+                            word: match,
+                            repeat: false,
+                            letterIndex: this.state.letterIndex.concat(letterIndex),
+                            count: counter,
+                            invalidKey: false,
+                        }, () => {
+
+                            // Update gamesWon
+                            if( this.win() ) {
+                                console.log("Game Won")
+            
+                                this.setState({
+                                    pageLock: true,
+                                    wins: this.state.wins +1,
+                                }, () => {
+                                    setTimeout(() => {
+                                        this.resetGame();
+                                        this.setWord();
+                                    }, 5000);
+                                });
+            
+                            };
+                        });
+
+                    // If incorrect letter guessed
+                    } else if( !correct ) {
+                        console.log("Bad Guess")
+
+                        this.setState({
+                            allAttempts: this.state.allAttempts.concat(event.key),
+                            repeat: false,
+                            numberOfBadAttempts: this.state.numberOfBadAttempts + 1,
+                            invalidKey: false,
+                        }, () => {
+
+                            // Update gamesLost
+                            if( this.loss() ) {
+                                console.log("Game Lost")
+                                
+                                this.setState({
+                                    pageLock: true,
+                                    losses: this.state.losses + 1,
+                                }, () => {
+                                    setTimeout(() => {
+                                        this.resetGame();
+                                        this.setWord();
+                                    }, 5000);
+                                });
+            
+                            }
+                        });
+
+                    } else {
+
+                        console.log("Key event not accounted for...")
+                    };
+
+                // If repeat = true
+                } else {
+
+                    this.setState({
+                        repeat: true,
+                    });
+
+                };
             } else {
 
-                this.setState({
-                    repeat: true,
-                });
+                return;
 
             };
-        } else {
-            console.log("pageLock status: ", this.state.pageLock)
-            return
-        }
 
-        console.log("handleKeyDown: word: ", this.state.word);
-        console.log("handleKeyDown: match: ", match);
-        console.log("handleKeyDown: allAttempts: ", this.state.allAttempts);
-        console.log("handleKeyDown: count: ", this.state.count);
-        console.log("handleKeyDown: BadAttempts: ", this.state.numberOfBadAttempts)
+        } else {
+
+            this.setState({
+                invalidKey:true,
+            });
+            
+        };
     };
 
     componentDidMount() {
@@ -255,6 +266,12 @@ class App extends Component {
                             {this.state.repeat ? (
                                 <div className="alert alert-primary" role="alert">
                                     Repeat character used!
+                                </div>
+                            ):(<></>)}
+
+                            {this.state.invalidKey ? (
+                                <div className="alert alert-primary" role="alert">
+                                    Invalid key pressed!
                                 </div>
                             ):(<></>)}
 
