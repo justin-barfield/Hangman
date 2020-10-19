@@ -13,7 +13,7 @@ function Letters(props) {
             <div className="card-body">
                 <h5
                     id={index} 
-                    className="card-title letter-card"
+                    className="card-title"
                 >
                     {props.word[index].found ? (
                         <>{props.word[index].val}</>

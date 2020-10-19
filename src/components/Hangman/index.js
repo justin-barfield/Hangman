@@ -1,16 +1,16 @@
 import React from 'react';
 import './style.css';
 
-function Hangman() {
+function Hangman(props) {
     return (
 
-        <div className="row">
+        <div className="row pic-div ">
             
-            <img src="#"/>
+            <img src={props.pictures[0].image} id="hangman" className=""/>
 
         </div>
 
-    )
-}
+    );
+};
 
 export default Hangman;

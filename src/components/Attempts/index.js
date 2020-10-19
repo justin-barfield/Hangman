@@ -3,12 +3,12 @@ import './style.css';
 
 function Attempts(props) {
     return (
-        <div className="row">
+        <div className="row scores">
             
             Letters used: {props.allAttempts}
 
         </div>
-    )
-}
+    );
+};
 
 export default Attempts;

@@ -2,6 +2,32 @@
     box-sizing: border-box;
 }
 
+#page-container {
+    height: 99vh;
+}
+
 div {
     border: 1px solid black;
+}
+
+.letter-card {
+    margin: 30px;
+}
+
+#hangman {
+    background-color: purple;
+    height: auto;
+    width: 60%;
+}
+
+#scores-col {
+    padding: 5% 0 0 5%;
+}
+
+#title {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }

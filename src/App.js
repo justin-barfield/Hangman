@@ -7,10 +7,13 @@ import GamesWon from './components/GamesWon';
 import GamesLost from './components/GamesLost';
 import Hangman from './components/Hangman';
 import Letters from './components/Letters';
+import pictures from './pictures';
+/* import dictionary from './assets/dictionary.json'; */
 
 class App extends Component {
 
     state={
+        apiWord: "",
         word: [],
         wordLength: 0,
         count: 0,
@@ -21,50 +24,58 @@ class App extends Component {
         repeat: false,
         wins: 0,
         losses: 0,
-        picture: "",
+        pictures,
         pageLock: false,
         invalidKey: false,
-        
+        isLoaded: false,
     }
 
-    // function for API word
-    // TODO: count word length, reset game, add wins & losses
+    // l5uxf3w9xt46ywzterjldr9o5rn0pnh68l93tjrfkzoa2bvvu
 
     // Clear word state for new incoming word
     resetGame = () => {
-        this.setState({ 
-            word: [],
-            count: 0,
-            allAttempts: [],
-            letterIndex: [],
-            numberOfBadAttempts: 0,
-            remainingAttempts: 6,
-            repeat: false,
-            pageLock: false,
-            invalidKey: false,
-         });
-    };
 
-    // Set word state for new incoming word
-    setWord = () => {
-        const fullWord = "dworldd";
-        const wordArray = fullWord.split("");
-        let wordLength = wordArray.length;
+        console.log("resetGame");
 
-        const wordObj = wordArray.map((value, index) => {
-            return {
-                found: false,
-                val: value,
-                id: index,
-            }
-        })
+        // this.wordNikApi();
 
-        this.setState({ 
-            word: wordObj,
-            wordLength: wordLength,
-            remainingAttempts: 6,
-        });
+        fetch(`http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=5&maxLength=15&limit=1&api_key=${process.env.REACT_APP_API_KEY}`)
+            .then( res => res.json() )
+            .then( ( result ) => {
+                this.setState({
+                    apiWord: result[0].word,
+                }, ()=> {
+            
+                    let fullWord = this.state.apiWord;
+                    let wordArray = fullWord.split("");
+                    let wordLength = wordArray.length;
         
+                    // Send wordObj to state with value and index
+                    let wordObj = wordArray.map((value, index) => {
+                        return {
+                            found: false,
+                            val: value,
+                            id: index,
+                        }
+                    })
+        
+                    this.setState({ 
+                        word: wordObj,
+                        wordLength: wordLength,
+                        remainingAttempts: 6,
+                        count: 0,
+                        allAttempts: [],
+                        letterIndex: [],
+                        numberOfBadAttempts: 0,
+                        repeat: false,
+                        pageLock: false,
+                        invalidKey: false,
+                    });
+                });
+            })
+            .catch( ( error ) => {
+                console.log("API ERROR: ", error);
+            })
     };
 
     // Win count bool
@@ -148,7 +159,7 @@ class App extends Component {
                                 }, () => {
                                     setTimeout(() => {
                                         this.resetGame();
-                                        this.setWord();
+                                        // this.setWord();
                                     }, 5000);
                                 });
             
@@ -176,7 +187,7 @@ class App extends Component {
                                 }, () => {
                                     setTimeout(() => {
                                         this.resetGame();
-                                        this.setWord();
+                                        // this.setWord();
                                     }, 5000);
                                 });
             
@@ -207,18 +218,19 @@ class App extends Component {
             this.setState({
                 invalidKey:true,
             });
-            
+
         };
     };
 
     componentDidMount() {
         this.resetGame();
-        this.setWord();
         if( this.state.pageLock ) {
             return
         } else {
             document.addEventListener("keydown", this.handleKeyDown);
         }
+
+        console.log();
     };
 
     render(){
@@ -226,17 +238,21 @@ class App extends Component {
 
         <>
 
-            <div className="container-fluid">
+            <div className="container-fluid" id="page-container">
 
-                <div className="row">
+                <div className="row" id="title">
 
-                    <Title/>
+                    <div className="col">
+
+                        <Title/>
+
+                    </div>
                     
                 </div>
 
                 <div className="row">
 
-                    <div className="col-4">
+                    <div id="scores-col" className="col-3">
 
                         <Attempts
                             allAttempts={this.state.allAttempts}
@@ -253,33 +269,41 @@ class App extends Component {
                     
                     </div>
 
-                    <div className="col-8">
+                    <div className="col-9">
 
                         <div className="row">
 
-                            <Hangman/>
+                            <div className="col">
+
+                                <Hangman
+                                    pictures={pictures}
+                                />
+
+                            </div>
 
                         </div>
 
                         <div className="row">
+                            <div className="col">
 
-                            {this.state.repeat ? (
-                                <div className="alert alert-primary" role="alert">
-                                    Repeat character used!
-                                </div>
-                            ):(<></>)}
+                                {this.state.repeat ? (
+                                    <div className="alert alert-danger" role="alert">
+                                        Repeat character used!
+                                    </div>
+                                ):(<></>)}
 
-                            {this.state.invalidKey ? (
-                                <div className="alert alert-primary" role="alert">
-                                    Invalid key pressed!
-                                </div>
-                            ):(<></>)}
+                                {this.state.invalidKey ? (
+                                    <div className="alert alert-warning" role="alert">
+                                        Invalid key pressed!
+                                    </div>
+                                ):(<></>)}
 
-                            <Letters 
-                                word={this.state.word}
-                                correct={this.state.correct}
-                            />
+                                <Letters 
+                                    word={this.state.word}
+                                    correct={this.state.correct}
+                                />
 
+                            </div>
                         </div>
 
                     </div>

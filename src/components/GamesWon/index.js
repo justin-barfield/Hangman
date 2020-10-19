@@ -3,12 +3,12 @@ import './style.css';
 
 function GamesWon(props) {
     return (
-        <div className="row">
+        <div className="row scores">
             
             Games Won: {props.wins}
 
         </div>
-    )
-}
+    );
+};
 
 export default GamesWon;
