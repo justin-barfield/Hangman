@@ -4,9 +4,9 @@ import './style.css';
 function GamesWon(props) {
     return (
         <div className="row scores">
-            
-            Games Won: {props.wins}
-
+            <h3>
+                Games Won: {props.wins}
+            </h3>
         </div>
     );
 };

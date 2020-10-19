@@ -18,6 +18,10 @@ div {
     background-color: purple;
     height: auto;
     width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 #scores-col {
@@ -26,6 +30,15 @@ div {
 
 #title {
     height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#word-row {
+    width: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;

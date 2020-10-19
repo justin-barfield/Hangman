@@ -26,8 +26,7 @@ class App extends Component {
         losses: 0,
         pictures,
         pageLock: false,
-        invalidKey: false,
-        isLoaded: false,
+        previousWords: [],
     }
 
     // l5uxf3w9xt46ywzterjldr9o5rn0pnh68l93tjrfkzoa2bvvu
@@ -154,6 +153,7 @@ class App extends Component {
                                 console.log("Game Won")
             
                                 this.setState({
+                                    previousWords: this.state.apiWord,
                                     pageLock: true,
                                     wins: this.state.wins +1,
                                 }, () => {
@@ -182,6 +182,7 @@ class App extends Component {
                                 console.log("Game Lost")
                                 
                                 this.setState({
+                                    previousWords: this.state.apiWord,
                                     pageLock: true,
                                     losses: this.state.losses + 1,
                                 }, () => {
@@ -266,14 +267,20 @@ class App extends Component {
                             losses={this.state.losses}
                         />
 
+                        <div className="row scores">
+                            <h3>
+                                Attempts remaining: {this.state.remainingAttempts}
+                            </h3>
+                        </div>
+
                     
                     </div>
 
-                    <div className="col-9">
+                    <div className="col-6">
 
                         <div className="row">
 
-                            <div className="col">
+                            <div className="col d-flex justify-content-center">
 
                                 <Hangman
                                     pictures={pictures}
@@ -281,29 +288,46 @@ class App extends Component {
 
                             </div>
 
+
                         </div>
 
-                        <div className="row">
-                            <div className="col">
+                    </div>
 
-                                {this.state.repeat ? (
-                                    <div className="alert alert-danger" role="alert">
-                                        Repeat character used!
-                                    </div>
-                                ):(<></>)}
+                    <div className="col-3">
+                        <h3>Previous words:</h3>
+                        <br></br>
+                        {this.state.previousWords}
+                    </div>
 
-                                {this.state.invalidKey ? (
-                                    <div className="alert alert-warning" role="alert">
-                                        Invalid key pressed!
-                                    </div>
-                                ):(<></>)}
+                    <div className="row w-100">
 
-                                <Letters 
-                                    word={this.state.word}
-                                    correct={this.state.correct}
-                                />
+                        <div className="col d-flex justify-content-center">
 
-                            </div>
+                            {this.state.repeat ? (
+                                <div className="alert alert-danger" role="alert">
+                                    Repeat character used!
+                                </div>
+                            ):(<></>)}
+
+                            {this.state.invalidKey ? (
+                                <div className="alert alert-warning" role="alert">
+                                    Invalid key pressed!
+                                </div>
+                            ):(<></>)}
+
+                        </div>
+
+                    </div>
+
+                    <div className="row" id="word-row">
+
+                        <div className="col d-flex justify-content-center">
+
+                            <Letters 
+                                word={this.state.word}
+                                correct={this.state.correct}
+                            />
+
                         </div>
 
                     </div>

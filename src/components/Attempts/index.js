@@ -4,9 +4,9 @@ import './style.css';
 function Attempts(props) {
     return (
         <div className="row scores">
-            
-            Letters used: {props.allAttempts}
-
+            <h3>
+                Letters used: {props.allAttempts}
+            </h3>
         </div>
     );
 };

@@ -5,9 +5,9 @@ function GamesLost(props) {
 
     return (
         <div className="row scores">
-            
-            Games Lost: {props.losses}
-
+            <h3>
+                Games Lost: {props.losses}
+            </h3>
         </div>
     );
 };
