@@ -99,7 +99,7 @@ class App extends Component {
         let letterIndex= [];
         let counter = this.state.count;
         // TODO: exclude special keyboard keys like ctrl, alt, del, etc.
-        const regex = /^[A-Za-z]+$/
+        const regex = /^[A-Za-z]$/
 
         // validate key press is alphabetic
         if( regex.test(event.key) ) {
