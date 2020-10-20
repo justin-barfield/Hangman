@@ -98,6 +98,7 @@ class App extends Component {
         let correct = false;
         let letterIndex= [];
         let counter = this.state.count;
+        // TODO: exclude special keyboard keys like ctrl, alt, del, etc.
         const regex = /^[A-Za-z]+$/
 
         // validate key press is alphabetic
@@ -299,39 +300,39 @@ class App extends Component {
                         {this.state.previousWords}
                     </div>
 
-                    <div className="row w-100">
-
-                        <div className="col d-flex justify-content-center">
-
-                            {this.state.repeat ? (
-                                <div className="alert alert-danger" role="alert">
-                                    Repeat character used!
-                                </div>
-                            ):(<></>)}
-
-                            {this.state.invalidKey ? (
-                                <div className="alert alert-warning" role="alert">
-                                    Invalid key pressed!
-                                </div>
-                            ):(<></>)}
-
-                        </div>
-
-                    </div>
-
-                    <div className="row" id="word-row">
-
-                        <div className="col d-flex justify-content-center">
-
-                            <Letters 
-                                word={this.state.word}
-                                correct={this.state.correct}
-                            />
-
-                        </div>
-
-                    </div>
+                </div>
                     
+                <div className="row w-auto">
+
+                    <div className="col d-flex justify-content-center">
+
+                        {this.state.repeat ? (
+                            <div className="alert alert-danger d-flex justify-content-center" role="alert">
+                                Repeat character used!
+                            </div>
+                        ):(<></>)}
+
+                        {this.state.invalidKey ? (
+                            <div className="alert alert-warning d-flex justify-content-center" role="alert">
+                                Invalid key pressed!
+                            </div>
+                        ):(<></>)}
+
+                    </div>
+
+                </div>
+
+                <div className="row  w-auto" id="word-row">
+
+                    <div className="col d-flex justify-content-center">
+
+                        <Letters 
+                            word={this.state.word}
+                            correct={this.state.correct}
+                        />
+
+                    </div>
+
                 </div>
 
             </div>
