@@ -2,7 +2,7 @@
   "name": "hangman",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://justin-barfield.github.io/hangman",
+  "homepage": "http://justin-barfield.github.io/hangman",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
