@@ -6,7 +6,7 @@ function Hangman(props) {
 
         <div className="row pic-div ">
             
-            <img src={props.pictures[0].image} id="hangman" className=""/>
+            <img src={props.pictures[0].image} id="hangman" className="" alt="placeholder"/>
 
         </div>
 

@@ -8,7 +8,7 @@ import GamesLost from './components/GamesLost';
 import Hangman from './components/Hangman';
 import Letters from './components/Letters';
 import pictures from './pictures';
-/* import dictionary from './assets/dictionary.json'; */
+import API from "./utils/API";
 
 class App extends Component {
 
@@ -29,52 +29,89 @@ class App extends Component {
         previousWords: [],
     }
 
-    // l5uxf3w9xt46ywzterjldr9o5rn0pnh68l93tjrfkzoa2bvvu
+    wordNikApi = () => {
 
-    // Clear word state for new incoming word
-    resetGame = () => {
+        API.getWord()
+            .then( response => {
+                console.log("wordNikApi res: ", response);
 
-        console.log("resetGame");
-
-        // this.wordNikApi();
-
-        fetch(`http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=5&maxLength=15&limit=1&api_key=${process.env.REACT_APP_API_KEY}`)
-            .then( res => res.json() )
-            .then( ( result ) => {
-                this.setState({
-                    apiWord: result[0].word,
-                }, ()=> {
-            
-                    let fullWord = this.state.apiWord;
-                    let wordArray = fullWord.split("");
-                    let wordLength = wordArray.length;
-        
-                    // Send wordObj to state with value and index
-                    let wordObj = wordArray.map((value, index) => {
-                        return {
-                            found: false,
-                            val: value,
-                            id: index,
-                        }
-                    })
-        
-                    this.setState({ 
-                        word: wordObj,
-                        wordLength: wordLength,
-                        remainingAttempts: 6,
-                        count: 0,
-                        allAttempts: [],
-                        letterIndex: [],
-                        numberOfBadAttempts: 0,
-                        repeat: false,
-                        pageLock: false,
-                        invalidKey: false,
-                    });
+                let fullWord = response.data;
+                let wordArray = fullWord.split("");
+                let wordLength = wordArray.length;
+    
+                // Send wordObj to state with value and index
+                let wordObj = wordArray.map((value, index) => {
+                    return {
+                        found: false,
+                        val: value,
+                        id: index,
+                    }
+                })
+    
+                this.setState({ 
+                    word: wordObj,
+                    wordLength: wordLength,
+                    remainingAttempts: 6,
+                    count: 0,
+                    allAttempts: [],
+                    letterIndex: [],
+                    numberOfBadAttempts: 0,
+                    repeat: false,
+                    pageLock: false,
+                    invalidKey: false,
                 });
             })
             .catch( ( error ) => {
                 console.log("API ERROR: ", error);
             })
+
+    }
+    // Clear word state for new incoming word
+    resetGame = async() => {
+
+        console.log("resetGame");
+
+        await this.wordNikApi()
+
+        // this.wordNikApi();
+
+        // fetch(`http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=5&maxLength=15&limit=1&api_key=${process.env.REACT_APP_API_KEY}`)
+        //     .then( res => res.json() )
+        //     .then( ( result ) => {
+        //         this.setState({
+        //             apiWord: result[0].word,
+        //         }, ()=> {
+            
+        //             let fullWord = this.state.apiWord;
+        //             let wordArray = fullWord.split("");
+        //             let wordLength = wordArray.length;
+        
+        //             // Send wordObj to state with value and index
+        //             let wordObj = wordArray.map((value, index) => {
+        //                 return {
+        //                     found: false,
+        //                     val: value,
+        //                     id: index,
+        //                 }
+        //             })
+        
+        //             this.setState({ 
+        //                 word: wordObj,
+        //                 wordLength: wordLength,
+        //                 remainingAttempts: 6,
+        //                 count: 0,
+        //                 allAttempts: [],
+        //                 letterIndex: [],
+        //                 numberOfBadAttempts: 0,
+        //                 repeat: false,
+        //                 pageLock: false,
+        //                 invalidKey: false,
+        //             });
+        //         });
+        //     })
+        //     .catch( ( error ) => {
+        //         console.log("API ERROR: ", error);
+        //     })
     };
 
     // Win count bool
@@ -226,6 +263,7 @@ class App extends Component {
 
     componentDidMount() {
         this.resetGame();
+        // API.getWord();
         if( this.state.pageLock ) {
             return
         } else {
