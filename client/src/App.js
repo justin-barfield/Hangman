@@ -17,10 +17,12 @@ class App extends Component {
         word: [],
         wordLength: 0,
         count: 0,
+        goodAttempts: [],
+        badAttempts:[],
         allAttempts: [],
         letterIndex: [],
         numberOfBadAttempts: 0,
-        remainingAttempts: 6,
+        remainingAttempts: 8,
         repeat: false,
         wins: 0,
         losses: 0,
@@ -33,8 +35,8 @@ class App extends Component {
 
         API.getWord()
             .then( response => {
-                console.log("wordNikApi res: ", response);
 
+                let previousWords = [...this.state.previousWords];
                 let fullWord = response.data;
                 let wordArray = fullWord.split("");
                 let wordLength = wordArray.length;
@@ -46,72 +48,35 @@ class App extends Component {
                         val: value,
                         id: index,
                     }
-                })
+                });
     
                 this.setState({ 
+                    apiWord: fullWord,
                     word: wordObj,
                     wordLength: wordLength,
-                    remainingAttempts: 6,
+                    remainingAttempts: 8,
                     count: 0,
+                    goodAttempts: [],
+                    badAttempts:[],
                     allAttempts: [],
                     letterIndex: [],
                     numberOfBadAttempts: 0,
                     repeat: false,
                     pageLock: false,
                     invalidKey: false,
+                    previousWords: previousWords
                 });
             })
             .catch( ( error ) => {
                 console.log("API ERROR: ", error);
-            })
+            });
 
-    }
+    };
     // Clear word state for new incoming word
     resetGame = async() => {
 
-        console.log("resetGame");
+        await this.wordNikApi();
 
-        await this.wordNikApi()
-
-        // this.wordNikApi();
-
-        // fetch(`http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=5&maxLength=15&limit=1&api_key=${process.env.REACT_APP_API_KEY}`)
-        //     .then( res => res.json() )
-        //     .then( ( result ) => {
-        //         this.setState({
-        //             apiWord: result[0].word,
-        //         }, ()=> {
-            
-        //             let fullWord = this.state.apiWord;
-        //             let wordArray = fullWord.split("");
-        //             let wordLength = wordArray.length;
-        
-        //             // Send wordObj to state with value and index
-        //             let wordObj = wordArray.map((value, index) => {
-        //                 return {
-        //                     found: false,
-        //                     val: value,
-        //                     id: index,
-        //                 }
-        //             })
-        
-        //             this.setState({ 
-        //                 word: wordObj,
-        //                 wordLength: wordLength,
-        //                 remainingAttempts: 6,
-        //                 count: 0,
-        //                 allAttempts: [],
-        //                 letterIndex: [],
-        //                 numberOfBadAttempts: 0,
-        //                 repeat: false,
-        //                 pageLock: false,
-        //                 invalidKey: false,
-        //             });
-        //         });
-        //     })
-        //     .catch( ( error ) => {
-        //         console.log("API ERROR: ", error);
-        //     })
     };
 
     // Win count bool
@@ -123,7 +88,7 @@ class App extends Component {
 
     // Attempt count bool
     loss = () => {
-        if( this.state.numberOfBadAttempts === 5 ) {
+        if( this.state.numberOfBadAttempts === 8 ) {
             return true
         }
     };
@@ -135,8 +100,8 @@ class App extends Component {
         let correct = false;
         let letterIndex= [];
         let counter = this.state.count;
-        // TODO: exclude special keyboard keys like ctrl, alt, del, etc.
-        const regex = /^[A-Za-z]$/
+        let remainingAttempts = this.state.remainingAttempts;
+        const regex = /^[A-Za-z]$/;
 
         // validate key press is alphabetic
         if( regex.test(event.key) ) {
@@ -154,7 +119,7 @@ class App extends Component {
 
             // Validate if key pressed matches the word
             this.state.word.map((value, index) => {
-                
+
                 if( this.state.word[index].val === event.key ) {
 
                     match[index] = {...match[index], found: true};          
@@ -168,16 +133,15 @@ class App extends Component {
 
             // if page is not locked
             if ( !this.state.pageLock ){
-                console.log("pageLock status: ", this.state.pageLock)
 
                 // if repeat = false 
                 if( !repeat ) {
 
-                    // If not correct letter guessed
+                    // If correct letter guessed
                     if( correct ) {
-                        console.log("Good Guess")
 
                         this.setState({
+                            goodAttempts: this.state.goodAttempts.concat(event.key),
                             allAttempts: this.state.allAttempts.concat(event.key),
                             word: match,
                             repeat: false,
@@ -188,10 +152,12 @@ class App extends Component {
 
                             // Update gamesWon
                             if( this.win() ) {
-                                console.log("Game Won")
+
+                                let previousWords = [...this.state.previousWords];
+                                previousWords.push(this.state.apiWord);
             
                                 this.setState({
-                                    previousWords: this.state.apiWord,
+                                    previousWords: previousWords,
                                     pageLock: true,
                                     wins: this.state.wins +1,
                                 }, () => {
@@ -206,18 +172,21 @@ class App extends Component {
 
                     // If incorrect letter guessed
                     } else if( !correct ) {
-                        console.log("Bad Guess")
 
                         this.setState({
+                            badAttempts: this.state.badAttempts.concat(event.key),
                             allAttempts: this.state.allAttempts.concat(event.key),
                             repeat: false,
                             numberOfBadAttempts: this.state.numberOfBadAttempts + 1,
+                            remainingAttempts: remainingAttempts -1,
                             invalidKey: false,
                         }, () => {
 
                             // Update gamesLost
                             if( this.loss() ) {
-                                console.log("Game Lost")
+
+                                let previousWords = [...this.state.previousWords];
+                                previousWords.push(this.state.apiWord);
                                 
                                 this.setState({
                                     previousWords: this.state.apiWord,
@@ -263,14 +232,11 @@ class App extends Component {
 
     componentDidMount() {
         this.resetGame();
-        // API.getWord();
         if( this.state.pageLock ) {
             return
         } else {
             document.addEventListener("keydown", this.handleKeyDown);
         }
-
-        console.log();
     };
 
     render(){
@@ -295,7 +261,7 @@ class App extends Component {
                     <div id="scores-col" className="col-3">
 
                         <Attempts
-                            allAttempts={this.state.allAttempts}
+                            badAttempts={this.state.badAttempts}
                         />
 
                         <GamesWon
@@ -335,7 +301,7 @@ class App extends Component {
                     <div className="col-3">
                         <h3>Previous words:</h3>
                         <br></br>
-                        {this.state.previousWords}
+                        <h4>{this.state.previousWords}</h4>
                     </div>
 
                 </div>
