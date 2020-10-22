@@ -48,7 +48,7 @@ app.get("/getWord", (req, res) => {
 
 //if no other routes are hit, send the react app
 app.get( (req, res) => {
-    res.sendFile(path.join(__dirname, "/public"));
+    res.sendFile(path.join(__dirname, "/public/"));
 });
 // router.use(function(req, res) {
 //     res.sendFile(path.join(__dirname, "../client/build/index.html"));
