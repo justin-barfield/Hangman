@@ -1,13 +1,24 @@
 {
   "name": "hangman",
   "version": "1.0.0",
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "description": "Hangman game server incorporating Express server and AWS integration.",
   "main": "server.js",
+  "dependencies": {
+    "aws-sdk": "^2.776.0",
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "if-env": "^1.0.4"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
+  },
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:prod": "node server.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
-    "client": "cd ./client && npm run start",
+    "client": "cd client && npm run start",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
@@ -18,22 +29,8 @@
   },
   "author": "Justin Barfield",
   "license": "ISC",
-  "devDependencies": {
-    "@babel/preset-typescript": "^7.6.0",
-    "concurrently": "^4.1.0",
-    "nodemon": "^1.18.7"
-  },
   "bugs": {
     "url": "https://github.com/justin-barfield/hangman/issues"
   },
-  "homepage": "https://github.com/justin-barfield/hangman/blob/main/README.md",
-  "dependencies": {
-    "aws-sdk": "^2.567.0",
-    "axios": "^0.19.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "if-env": "^1.0.4",
-    "mysql2": "^1.7.0",
-    "sequelize": "^5.21.1"
-  }
+  "homepage": "https://github.com/justin-barfield/hangman#readme"
 }

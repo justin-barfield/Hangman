@@ -128,3 +128,6 @@ yarn-error.log*
 
 # API Key
 .env
+
+# old files
+.old
