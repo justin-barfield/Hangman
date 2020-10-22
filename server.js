@@ -36,11 +36,7 @@ app.get("/getWord", (req, res) => {
         .get(`http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=5&maxLength=15&limit=1&api_key=${process.env.REACT_APP_API_KEY}`)
         .then( response => {
 
-            console.log("res.data: ", response.data )
-
             let word = response.data[0].word;
-            console.log("word: ", word);
-
             res.send( word );
 
         })
@@ -52,7 +48,7 @@ app.get("/getWord", (req, res) => {
 
 //if no other routes are hit, send the react app
 app.get( (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+    res.sendFile(path.join(__dirname, "/public"));
 });
 // router.use(function(req, res) {
 //     res.sendFile(path.join(__dirname, "../client/build/index.html"));
