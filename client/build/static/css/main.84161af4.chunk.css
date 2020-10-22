@@ -1,0 +1,2 @@
+*{box-sizing:border-box}#page-container{height:99vh}div{border:1px solid #000}.letter-card{margin:30px}#hangman{background-color:purple;height:auto;width:60%;display:flex;justify-content:center;align-items:center;text-align:center}#scores-col{padding:5% 0 0 5%}#title{height:100px}#title,#word-row{display:flex;justify-content:center;align-items:center;text-align:center}#word-row{height:auto}#word-row,.alert{width:100%}
+/*# sourceMappingURL=main.84161af4.chunk.css.map */
