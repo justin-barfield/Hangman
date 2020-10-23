@@ -5,7 +5,7 @@ function Letters(props) {
     const mapAll = props.word.map((value, index) =>
     
         <div 
-            className="card bg-primary letter-card"
+            className="card alert-dark letter-card"
             key={value.id}
         >
             <div className="card-body">
@@ -15,7 +15,7 @@ function Letters(props) {
                 >
                     {props.word[index].found ? (
                         <>{props.word[index].val}</>
-                    ) : (<>_</>)}
+                    ) : (<></>)}
                 </h5>
             </div>
         </div>
