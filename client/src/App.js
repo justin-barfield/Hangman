@@ -36,18 +36,37 @@ class App extends Component {
         API.getWord()
             .then( response => {
 
+                const regex = /^[A-Za-z]$/;
+
                 let previousWords = [...this.state.previousWords];
                 let fullWord = response.data;
                 let wordArray = fullWord.split("");
                 let wordLength = wordArray.length;
-    
+                let counter = this.state.count;
+
                 // Send wordObj to state with value and index
                 let wordObj = wordArray.map((value, index) => {
-                    return {
-                        found: false,
-                        val: value,
-                        id: index,
-                    }
+
+                    if( !regex.test(value) ) {
+
+                        counter++;
+
+                        return {
+                            found: true,
+                            val: value,
+                            id: index,
+                        };
+
+                    } else {
+
+                        return {
+                            found: false,
+                            val: value,
+                            id: index,
+                        };
+
+                    };
+
                 });
     
                 this.setState({ 
@@ -55,7 +74,7 @@ class App extends Component {
                     word: wordObj,
                     wordLength: wordLength,
                     remainingAttempts: 8,
-                    count: 0,
+                    count: counter,
                     goodAttempts: [],
                     badAttempts:[],
                     allAttempts: [],
@@ -73,9 +92,9 @@ class App extends Component {
 
     };
     // Clear word state for new incoming word
-    resetGame = async() => {
+    resetGame = () => {
 
-        await this.wordNikApi();
+        this.wordNikApi();
 
     };
 
@@ -102,6 +121,8 @@ class App extends Component {
         let counter = this.state.count;
         let remainingAttempts = this.state.remainingAttempts;
         const regex = /^[A-Za-z]$/;
+
+        console.log(this.state.count)
 
         // validate key press is alphabetic
         if( regex.test(event.key) ) {
@@ -301,7 +322,13 @@ class App extends Component {
                     <div className="col-3">
                         <h3>Previous words:</h3>
                         <br></br>
-                        <h4>{this.state.previousWords}</h4>
+                        <h4>{this.state.previousWords.length ? (
+                            <>
+                                {this.state.previousWords.map( (value, index) => {
+                                    console.log(value)
+                                })}
+                            </>
+                        ):(<></>)}</h4>
                     </div>
 
                 </div>
