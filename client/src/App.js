@@ -38,7 +38,7 @@ class App extends Component {
 
                 const regex = /^[A-Za-z]$/;
 
-                let previousWords = [...this.state.previousWords];
+                let previousWords = this.state.previousWords;
                 let fullWord = response.data;
                 let wordArray = fullWord.split("");
                 let wordLength = wordArray.length;
@@ -122,8 +122,6 @@ class App extends Component {
         let remainingAttempts = this.state.remainingAttempts;
         const regex = /^[A-Za-z]$/;
 
-        console.log(this.state.count)
-
         // validate key press is alphabetic
         if( regex.test(event.key) ) {
         
@@ -184,7 +182,6 @@ class App extends Component {
                                 }, () => {
                                     setTimeout(() => {
                                         this.resetGame();
-                                        // this.setWord();
                                     }, 5000);
                                 });
             
@@ -210,13 +207,12 @@ class App extends Component {
                                 previousWords.push(this.state.apiWord);
                                 
                                 this.setState({
-                                    previousWords: this.state.apiWord,
+                                    previousWords: previousWords,
                                     pageLock: true,
                                     losses: this.state.losses + 1,
                                 }, () => {
                                     setTimeout(() => {
                                         this.resetGame();
-                                        // this.setWord();
                                     }, 5000);
                                 });
             
@@ -322,13 +318,24 @@ class App extends Component {
                     <div className="col-3">
                         <h3>Previous words:</h3>
                         <br></br>
-                        <h4>{this.state.previousWords.length ? (
+
+                        { this.state.previousWords.length ? (
+
                             <>
-                                {this.state.previousWords.map( (value, index) => {
-                                    console.log(value)
-                                })}
+                                {this.state.previousWords.map( (value, index) => (
+
+                                    <div 
+                                    key={index}
+                                    className="row">
+
+                                        {value}
+
+                                    </div>
+
+                                ))}
                             </>
-                        ):(<></>)}</h4>
+
+                        ):(<></>)}
                     </div>
 
                 </div>
@@ -370,9 +377,9 @@ class App extends Component {
 
         </>
 
-        )
-    }
+        );
+    };
 
-}
+};
 
 export default App;
