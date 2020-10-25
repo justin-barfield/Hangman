@@ -42,7 +42,7 @@ class App extends Component {
                 let fullWord = response.data;
                 let wordArray = fullWord.split("");
                 let wordLength = wordArray.length;
-                let counter = this.state.count;
+                let counter = 0;
 
                 // Send wordObj to state with value and index
                 let wordObj = wordArray.map((value, index) => {
