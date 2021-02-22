@@ -296,7 +296,7 @@ class App extends Component {
                     
                     </div>
 
-                    <div className="col-6 border">
+                    <div className="col-6">
 
                         <div className="row">
 
