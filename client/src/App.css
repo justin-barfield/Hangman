@@ -48,3 +48,16 @@
 .alert {
     width: 100%;
 }
+
+.card-body {
+    height: 75px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h5 {
+    width: 20px;
+}

@@ -339,6 +339,19 @@ class App extends Component {
 
                 </div>
                     
+                <div className="row  w-auto" id="word-row">
+
+                    <div className="col d-flex justify-content-center">
+
+                        <Letters 
+                            word={this.state.word}
+                            correct={this.state.correct}
+                        />
+
+                    </div>
+
+                </div>
+
                 <div className="row w-auto">
 
                     <div className="col d-flex justify-content-center">
@@ -354,19 +367,6 @@ class App extends Component {
                                 Invalid key pressed!
                             </div>
                         ):(<></>)}
-
-                    </div>
-
-                </div>
-
-                <div className="row  w-auto" id="word-row">
-
-                    <div className="col d-flex justify-content-center">
-
-                        <Letters 
-                            word={this.state.word}
-                            correct={this.state.correct}
-                        />
 
                     </div>
 

@@ -5,7 +5,7 @@ function Letters(props) {
     const mapAll = props.word.map((value, index) =>
     
         <div 
-            className="card alert-dark letter-card"
+            className="card alert-dark letter-card border-0 rounded-0 overflow-hidden"
             key={value.id}
         >
             <div className="card-body">
