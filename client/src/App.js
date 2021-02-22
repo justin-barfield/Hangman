@@ -134,8 +134,6 @@ class App extends Component {
 
             });
 
-            /* TODO: Unexpected error here. Attempting to have good and bad attempts separately checked causes repeat to never return true. Would like to have the correct letters not display in letters used. To be investigated later. Bypassing error by placing all key strokes into allAttempts state. */
-
             // Validate if key pressed matches the word
             this.state.word.map((value, index) => {
 
@@ -298,7 +296,7 @@ class App extends Component {
                     
                     </div>
 
-                    <div className="col-6">
+                    <div className="col-6 border">
 
                         <div className="row">
 
@@ -306,6 +304,7 @@ class App extends Component {
 
                                 <Hangman
                                     pictures={pictures}
+                                    badAttempts={this.state.numberOfBadAttempts}
                                 />
 
                             </div>
